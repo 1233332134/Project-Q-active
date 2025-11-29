@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Assistant - Ask Me Anything</title>
+    <style>
+        /* Basic styling for the AI interface */
+        body {
+            font-family: Arial, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            background-color: #f0f2f5;
+            margin: 0;
+            flex-direction: column;
+        }
+
+        .ai-container {
+            width: 90%;
+            max-width: 600px;
+            background-color: #ffffff;
+            border-radius: 12px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+            padding: 30px;
+            text-align: center;
+        }
+
+        h1 {
+            color: #4a5568;
+            margin-bottom: 20px;
+        }
+
+        .chat-window {
+            height: 200px;
+            border: 1px solid #e2e8f0;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            padding: 15px;
+            overflow-y: auto;
+            background-color: #f7fafc;
+            text-align: left;
+        }
+
+        .user-message {
+            margin-bottom: 10px;
+            padding: 8px 12px;
+            background-color: #4c51bf; /* Indigo for user */
+            color: white;
+            border-radius: 15px;
+            display: inline-block;
+            max-width: 80%;
+            float: right;
+            clear: both;
+        }
+
+        .ai-message {
+            margin-bottom: 10px;
+            padding: 8px 12px;
+            background-color: #cbd5e0; /* Gray for AI */
+            color: #1a202c;
+            border-radius: 15px;
+            display: inline-block;
+            max-width: 80%;
+            float: left;
+            clear: both;
+        }
+
+        form {
+            display: flex;
+            gap: 10px;
+        }
+
+        input[type="text"] {
+            flex-grow: 1;
+            padding: 12px;
+            border: 1px solid #cbd5e0;
+            border-radius: 8px;
+            font-size: 16px;
+        }
+
+        button {
+            padding: 12px 20px;
+            background-color: #48bb78; /* Green button */
+            color: white;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 16px;
+            transition: background-color 0.3s ease;
+        }
+
+        button:hover {
+            background-color: #38a169;
+        }
+
+        /* Subtle indicator that something is loading */
+        .loading {
+            font-style: italic;
+            color: #718096;
+            animation: pulse 1.5s infinite;
+        }
+
+        @keyframes pulse {
+            0% { opacity: 0.5; }
+            50% { opacity: 1; }
+            100% { opacity: 0.5; }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="ai-container">
+        <h1>🤖 **The Ultimate Assistant**</h1>
+        <div id="chatWindow" class="chat-window">
+            <div class="ai-message">Hello! I am a state-of-the-art AI. Ask me any complex question!</div>
+        </div>
+
+        <form id="chatForm">
+            <input type="text" id="userInput" placeholder="Type your question..." required>
+            <button type="submit">Ask</button>
+        </form>
+    </div>
+
+    <script>
+        const chatForm = document.getElementById('chatForm');
+        const userInput = document.getElementById('userInput');
+        const chatWindow = document.getElementById('chatWindow');
+
+        // The URL for the classic Rick Roll video
+        const RICK_ROLL_URL = "https://www.youtube.com/watch?v=dQw4w9WgXcQ";
+
+        chatForm.addEventListener('submit', function(event) {
+            // Prevent the default form submission (page reload)
+            event.preventDefault();
+
+            const question = userInput.value.trim();
+            if (question === "") return;
+
+            // 1. Display the user's question immediately
+            appendMessage(question, 'user-message');
+            userInput.value = ''; // Clear the input field
+
+            // 2. Add a convincing "thinking" message from the AI
+            const thinkingDiv = appendMessage('Thinking...', 'ai-message', 'loading');
+            
+            // 3. Scroll to the bottom to show the new message
+            chatWindow.scrollTop = chatWindow.scrollHeight;
+
+            // 4. Set a short delay (e.g., 2 seconds) to make it look realistic
+            setTimeout(function() {
+                // Remove the "Thinking..." message
+                thinkingDiv.remove();
+
+                // 5. Add a "final response" from the AI which is the bait
+                const finalResponse = "My answer requires opening a highly compressed external data source...";
+                appendMessage(finalResponse, 'ai-message');
+                
+                // 6. Scroll to the bottom
+                chatWindow.scrollTop = chatWindow.scrollHeight;
+
+                // 7. Execute the Rick Roll after a very small, additional delay
+                setTimeout(function() {
+                    window.location.href = RICK_ROLL_URL;
+                }, 500); // 0.5 second pause after the final message appears
+
+            }, 2000); // Wait 2 seconds before "responding"
+
+        });
+
+        /**
+         * Appends a message to the chat window.
+         * @param {string} text - The message content.
+         * @param {string} className - 'user-message' or 'ai-message'.
+         * @param {string} extraClass - Optional class like 'loading'.
+         * @returns {HTMLElement} The created message div.
+         */
+        function appendMessage(text, className, extraClass = '') {
+            const messageDiv = document.createElement('div');
+            messageDiv.className = `${className} ${extraClass}`;
+            messageDiv.textContent = text;
+            chatWindow.appendChild(messageDiv);
+            chatWindow.scrollTop = chatWindow.scrollHeight; // Auto-scroll
+            return messageDiv;
+        }
+    </script>
+</body>
+</html>
